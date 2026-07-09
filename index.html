@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Atman · Hub — Tableau de bord</title>
+<meta name="description" content="Hub personnel des projets actifs — LLM Man, TDAH Profile, JobHunt, Nous AI News, QA Universe">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   1. RESET & VARIABLES
+   ========================================================= */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;
+  --surface:#111118;
+  --surface-hover:#1a1a26;
+  --border:rgba(255,255,255,0.08);
+  --text:#f1f5f9;
+  --text-sec:#94a3b8;
+  --text-dim:#64748b;
+  --accent:#7c3aed;
+  --accent-soft:#8b5cf6;
+  --accent-glow:rgba(124,58,237,0.25);
+  --indigo:#6366f1;
+  --green:#22c55e;
+  --yellow:#eab308;
+  --red:#ef4444;
+  --radius:16px;
+  --radius-sm:10px;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --max-w:1200px;
+  --shadow-card:0 4px 30px rgba(0,0,0,.3);
+  --shadow-hover:0 8px 40px rgba(124,58,237,.12);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* =========================================================
+   2. LAYOUT
+   ========================================================= */
+.container{max-width:var(--max-w);margin:0 auto;padding:0 24px}
+
+/* =========================================================
+   3. HEADER
+   ========================================================= */
+header{
+  padding:2.5rem 0 1rem;
+  display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;
+  gap:1rem;
+}
+.header-left{}
+.header-badge-wrap{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.badge-dot{
+  display:inline-block;width:8px;height:8px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 8px rgba(34,197,94,.5);
+  animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+.badge-label{font-size:.72rem;font-weight:500;color:var(--green);text-transform:uppercase;letter-spacing:.04em}
+h1{
+  font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;
+  background:linear-gradient(135deg,var(--accent),var(--indigo));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;line-height:1.2;
+}
+.subtitle{font-size:.88rem;color:var(--text-sec);margin-top:.15rem}
+.header-right{text-align:right;flex-shrink:0}
+.update-label{font-size:.68rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.05em}
+.update-date{font-size:.78rem;color:var(--text-sec);margin-top:.1rem}
+
+/* =========================================================
+   4. FILTER PILLS
+   ========================================================= */
+.filters{
+  display:flex;flex-wrap:wrap;gap:.5rem;
+  padding:.8rem 0 1.5rem;
+}
+.filter-btn{
+  padding:.4rem 1rem;border-radius:20px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text-sec);font-size:.78rem;font-weight:500;
+  cursor:pointer;transition:all .25s ease;
+  font-family:var(--font);
+}
+.filter-btn:hover{border-color:var(--accent-soft);color:var(--text);background:rgba(124,58,237,.08)}
+.filter-btn.active{
+  background:var(--accent);border-color:var(--accent);
+  color:#fff;box-shadow:0 0 20px var(--accent-glow);
+}
+
+/* =========================================================
+   5. PROJECT CARDS GRID
+   ========================================================= */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  padding-bottom:3rem;
+}
+
+/* =========================================================
+   6. CARD
+   ========================================================= */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:1.5rem;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s ease,border-color .3s ease;
+  opacity:0;
+  transform:translateY(16px);
+  animation:card-fade-in .4s ease forwards;
+  display:flex;flex-direction:column;
+}
+.card:hover{
+  transform:translateY(-4px) scale(1.01);
+  box-shadow:var(--shadow-hover);
+  border-color:rgba(124,58,237,.2);
+}
+@keyframes card-fade-in{to{opacity:1;transform:translateY(0)}}
+
+.card-hidden{display:none!important}
+
+.card-tag{
+  display:inline-flex;align-items:center;
+  font-size:.65rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:.06em;padding:.2rem .6rem;
+  border-radius:6px;margin-bottom:.7rem;
+  width:fit-content;
+}
+.tag-ia{background:rgba(124,58,237,.12);color:var(--accent-soft)}
+.tag-sante{background:rgba(34,197,94,.12);color:var(--green)}
+.tag-jobs{background:rgba(234,179,8,.12);color:var(--yellow)}
+.tag-qa{background:rgba(99,102,241,.12);color:var(--indigo)}
+
+.card-icon{font-size:1.6rem;margin-bottom:.2rem;line-height:1}
+.card-title{font-size:1.05rem;font-weight:700;margin-bottom:.3rem;color:var(--text)}
+.card-desc{font-size:.82rem;color:var(--text-sec);line-height:1.6;margin-bottom:.8rem;flex:1}
+.card-meta{display:flex;align-items:center;gap:.5rem;margin-bottom:.7rem}
+.card-status{font-size:.72rem;font-weight:500;display:flex;align-items:center;gap:.3rem}
+.card-status-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+.card-status-dot.green{background:var(--green)}
+.card-status-dot.yellow{background:var(--yellow)}
+.card-status-dot.red{background:var(--red)}
+.card-warning{
+  font-size:.68rem;color:var(--yellow);
+  background:rgba(234,179,8,.1);
+  padding:.15rem .5rem;border-radius:6px;
+  display:inline-block;margin-left:.3rem;
+}
+.card-actions{display:flex;gap:.5rem;align-items:center}
+.card-btn{
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.45rem 1.1rem;border-radius:20px;
+  border:none;font-size:.78rem;font-weight:500;
+  cursor:pointer;transition:all .25s ease;
+  font-family:var(--font);text-decoration:none;
+}
+.card-btn-primary{
+  background:var(--accent);color:#fff;
+}
+.card-btn-primary:hover{background:var(--accent-soft);transform:scale(1.03)}
+.card-btn-primary:active{transform:scale(.97)}
+.card-btn-ghost{
+  background:transparent;color:var(--text-sec);
+  border:1px solid var(--border);
+}
+.card-btn-ghost:hover{background:var(--surface-hover);color:var(--text)}
+
+/* =========================================================
+   7. FOOTER
+   ========================================================= */
+footer{
+  text-align:center;padding:1.5rem 0 2.5rem;
+  font-size:.75rem;color:var(--text-dim);
+  border-top:1px solid var(--border);
+}
+footer a{color:var(--accent-soft);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+/* =========================================================
+   8. RESPONSIVE
+   ========================================================= */
+@media(max-width:1024px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .grid{grid-template-columns:1fr;gap:16px}
+  header{flex-direction:column;align-items:flex-start}
+  .header-right{text-align:left;width:100%}
+  .card{padding:1.2rem}
+  .filter-btn{padding:.35rem .8rem;font-size:.72rem}
+}
+
+/* =========================================================
+   9. PRINT
+   ========================================================= */
+@media print{
+  body{background:#fff;color:#111}
+  .card{opacity:1!important;transform:none!important;break-inside:avoid;border:1px solid #ddd}
+  .filter-btn{display:none}
+  h1{-webkit-text-fill-color:var(--accent)}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="container">
+  <div class="header-left">
+    <div class="header-badge-wrap">
+      <span class="badge-dot"></span>
+      <span class="badge-label">En ligne</span>
+    </div>
+    <h1>Atman · Hub</h1>
+    <p class="subtitle">Mes projets en cours</p>
+  </div>
+  <div class="header-right">
+    <div class="update-label">Dernière mise à jour</div>
+    <div class="update-date" id="update-date">—</div>
+  </div>
+</header>
+
+<!-- ===== FILTERS ===== -->
+<div class="container">
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">Tous</button>
+    <button class="filter-btn" data-filter="ia">IA &amp; LLM</button>
+    <button class="filter-btn" data-filter="qa">QA &amp; Test</button>
+    <button class="filter-btn" data-filter="sante">Santé</button>
+    <button class="filter-btn" data-filter="jobs">Jobs</button>
+  </div>
+</div>
+
+<!-- ===== PROJECTS GRID ===== -->
+<div class="container">
+  <div class="grid" id="grid">
+
+    <!-- 1. LLM Man -->
+    <div class="card" data-tags="ia">
+      <span class="card-tag tag-ia">IA &amp; LLM</span>
+      <div class="card-icon">🧪</div>
+      <div class="card-title">LLM Man</div>
+      <div class="card-desc">Site éducatif sur le test des LLM/agents IA. ISTQB CTFL, CT-AI, CT-GenAI. Chat NVIDIA, forum, glossaire, examens blancs.</div>
+      <div class="card-meta">
+        <span class="card-status"><span class="card-status-dot green"></span> Actif</span>
+      </div>
+      <div class="card-actions">
+        <a href="https://atmantest.github.io/llm-man/" target="_blank" rel="noopener" class="card-btn card-btn-primary">Ouvrir →</a>
+      </div>
+    </div>
+
+    <!-- 2. TDAH Profile -->
+    <div class="card" data-tags="sante">
+      <span class="card-tag tag-sante">Santé</span>
+      <div class="card-icon">🧠</div>
+      <div class="card-title">TDAH Profile</div>
+      <div class="card-desc">Profil TDAH interactif avec 6 auto-questionnaires diagnostiques (ASRS, WURS, BDI-II, MDQ, Borderline, DIVA 2.0).</div>
+      <div class="card-meta">
+        <span class="card-status"><span class="card-status-dot green"></span> Actif</span>
+      </div>
+      <div class="card-actions">
+        <a href="https://atmantest.github.io/tdah-profile/" target="_blank" rel="noopener" class="card-btn card-btn-primary">Ouvrir →</a>
+      </div>
+    </div>
+
+    <!-- 3. JobHunt -->
+    <div class="card" data-tags="jobs">
+      <span class="card-tag tag-jobs">Jobs</span>
+      <div class="card-icon">💼</div>
+      <div class="card-title">JobHunt</div>
+      <div class="card-desc">App de veille emploi avec scraping IA, cron LinkedIn, scoring automatique et alertes WhatsApp.</div>
+      <div class="card-meta">
+        <span class="card-status"><span class="card-status-dot yellow"></span> Render Free</span>
+        <span class="card-warning">⚡️ Cold start possible</span>
+      </div>
+      <div class="card-actions">
+        <a href="https://jobhunt-1-mt17.onrender.com/" target="_blank" rel="noopener" class="card-btn card-btn-primary">Ouvrir →</a>
+      </div>
+    </div>
+
+    <!-- 4. Nous AI News -->
+    <div class="card" data-tags="ia">
+      <span class="card-tag tag-ia">IA &amp; LLM</span>
+      <div class="card-icon">📰</div>
+      <div class="card-title">Nous AI News</div>
+      <div class="card-desc">Agrégateur d'actualités IA en temps réel — 86 flux RSS. Next.js + Supabase + Tailwind.</div>
+      <div class="card-meta">
+        <span class="card-status"><span class="card-status-dot green"></span> Actif</span>
+      </div>
+      <div class="card-actions">
+        <a href="https://nous-daily.vercel.app/" target="_blank" rel="noopener" class="card-btn card-btn-primary">Ouvrir →</a>
+      </div>
+    </div>
+
+    <!-- 5. QA Universe -->
+    <div class="card" data-tags="qa">
+      <span class="card-tag tag-qa">QA &amp; Test</span>
+      <div class="card-icon">✅</div>
+      <div class="card-title">QA Universe</div>
+      <div class="card-desc">Plateforme de ressources pour les professionnels QA — guides, templates, outils.</div>
+      <div class="card-meta">
+        <span class="card-status"><span class="card-status-dot green"></span> Actif</span>
+      </div>
+      <div class="card-actions">
+        <a href="https://atmantest.github.io/qa-universe/" target="_blank" rel="noopener" class="card-btn card-btn-primary">Ouvrir →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="container">
+  Built by Atman · 2026 · <a href="https://github.com/AtmanTest">GitHub : AtmanTest</a>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  // === DATE DYNAMIQUE ===
+  const now = new Date();
+  const months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  document.getElementById('update-date').textContent =
+    now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+
+  // === FILTRES ===
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.card');
+
+  // Appliquer les délais staggered au chargement
+  cards.forEach((card, i) => {
+    card.style.animationDelay = (50 * i) + 'ms';
+  });
+
+  function filterCards(tag) {
+    cards.forEach(card => {
+      const tags = (card.dataset.tags || '').split(',');
+      if (tag === 'all' || tags.includes(tag)) {
+        card.classList.remove('card-hidden');
+      } else {
+        card.classList.add('card-hidden');
+      }
+    });
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      filterCards(this.dataset.filter);
+    });
+  });
+
+})();
+</script>
+</body>
+</html>
