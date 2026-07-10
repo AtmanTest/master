@@ -206,7 +206,39 @@ footer a:hover{text-decoration:underline}
 }
 
 /* =========================================================
-   9. PRINT
+   9. API INFO BAR
+   ========================================================= */
+.api-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:.8rem 1.2rem;
+  margin-bottom:2rem;
+  backdrop-filter:blur(12px);
+  flex-wrap:wrap;
+  gap:.5rem;
+}
+.api-bar-left{display:flex;align-items:center;gap:.6rem}
+.api-icon{font-size:1.2rem}
+.api-label{font-weight:600;color:var(--text);font-size:.92rem}
+.api-model{
+  font-size:.78rem;
+  background:rgba(124,58,237,.13);
+  color:var(--accent-soft);
+  padding:.2rem .55rem;
+  border-radius:6px;
+  font-family:monospace;
+}
+.api-bar-right{display:flex;align-items:center;gap:.8rem}
+.api-balance{font-weight:700;font-size:1rem;color:var(--green)}
+.api-balance small{font-weight:400;font-size:.7rem;color:var(--text-dim)}
+.api-status{font-size:.78rem;color:var(--green)}
+
+/* =========================================================
+   10. PRINT
    ========================================================= */
 @media print{
   body{background:#fff;color:#111}
@@ -320,6 +352,21 @@ footer a:hover{text-decoration:underline}
       </div>
     </div>
 
+  </div>
+</div>
+
+<!-- ===== DEEPSEEK API STATUS ===== -->
+<div class="container">
+  <div class="api-bar">
+    <div class="api-bar-left">
+      <span class="api-icon">⚡</span>
+      <span class="api-label">DeepSeek API</span>
+      <span class="api-model">deepseek-v4-flash</span>
+    </div>
+    <div class="api-bar-right">
+      <span class="api-balance">$28.48 <small>USD</small></span>
+      <span class="api-status">● Disponible</span>
+    </div>
   </div>
 </div>
 
