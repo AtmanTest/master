@@ -238,7 +238,41 @@ footer a:hover{text-decoration:underline}
 .api-status{font-size:.78rem;color:var(--green)}
 
 /* =========================================================
-   10. PRINT
+   10. SECTION ILLUSTRATIONS
+   ========================================================= */
+.section-illu{
+  width:100%;
+  max-width:900px;
+  height:auto;
+  border-radius:var(--radius);
+  margin:1.2rem auto 0.8rem;
+  display:block;
+  box-shadow:0 0 40px rgba(124,58,237,.12),0 4px 30px rgba(0,0,0,.3);
+  transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease;
+}
+.section-illu:hover{
+  transform:scale(1.01);
+  box-shadow:0 0 60px rgba(124,58,237,.2),0 8px 40px rgba(0,0,0,.4);
+}
+.hero-illu{margin-top:0.5rem}
+.projects-illu{margin-bottom:1.5rem}
+
+/* =========================================================
+   11. SECTION TITLES
+   ========================================================= */
+.section-title{
+  font-size:clamp(1.2rem,2.5vw,1.6rem);
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:.5rem;
+}
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);border:0;
+}
+
+/* =========================================================
+   12. PRINT
    ========================================================= */
 @media print{
   body{background:#fff;color:#111}
@@ -266,19 +300,28 @@ footer a:hover{text-decoration:underline}
   </div>
 </header>
 
-<!-- ===== FILTERS ===== -->
-<div class="container">
-  <div class="filters" id="filters">
-    <button class="filter-btn active" data-filter="all">Tous</button>
-    <button class="filter-btn" data-filter="ia">IA &amp; LLM</button>
-    <button class="filter-btn" data-filter="qa">QA &amp; Test</button>
-    <button class="filter-btn" data-filter="sante">Santé</button>
-    <button class="filter-btn" data-filter="jobs">Jobs</button>
-  </div>
-</div>
+<!-- ===== HERO SECTION ===== -->
+<section class="hero-section">
+  <h2 class="section-title sr-only">Hub Overview</h2>
+  <img class="section-illu hero-illu" src="images/master_hero.png" alt="Hub dashboard network illustration" loading="lazy">
 
-<!-- ===== PROJECTS GRID ===== -->
-<div class="container">
+  <!-- ===== FILTERS ===== -->
+  <div class="container">
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all">Tous</button>
+      <button class="filter-btn" data-filter="ia">IA &amp; LLM</button>
+      <button class="filter-btn" data-filter="qa">QA &amp; Test</button>
+      <button class="filter-btn" data-filter="sante">Santé</button>
+      <button class="filter-btn" data-filter="jobs">Jobs</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROJECTS SECTION ===== -->
+<section class="projects-section">
+  <div class="container">
+    <h2 class="section-title">Projets Actifs</h2>
+    <img class="section-illu projects-illu" src="images/master_projects.png" alt="Projects network illustration" loading="lazy">
   <div class="grid" id="grid">
 
     <!-- 1. LLM Man -->
@@ -353,7 +396,7 @@ footer a:hover{text-decoration:underline}
     </div>
 
   </div>
-</div>
+</section>
 
 <!-- ===== DEEPSEEK API STATUS ===== -->
 <div class="container">
